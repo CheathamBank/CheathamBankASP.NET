@@ -14,7 +14,6 @@ namespace CheathamBankASP.NET
         {
             txtBoxes.Add(txtFname);
             txtBoxes.Add(txtPhoneNumber);
-            txtBoxes.Add(txtUsername);
             txtBoxes.Add(txtStreet);
             txtBoxes.Add(txtCity);
             txtBoxes.Add(txtState);
@@ -22,19 +21,34 @@ namespace CheathamBankASP.NET
 
             if (!IsPostBack)
             {
-                Objects.Customer currentCustomer = new Objects.Customer();
-                currentCustomer = Tools.CheathamCustomerDB.GetCustomer("755445");//<------------------------- Replace with session variable
+                int custIDSession;
+                //if they are requesting the page for the first time, make sure they are logged in
+                if (Session["CustID"] != null)
+                {
+                    custIDSession = (int)Session["CustID"];
+                    Objects.Customer currentCustomer = new Objects.Customer();
+                    currentCustomer = Tools.CheathamCustomerDB.GetCustomer(custIDSession);
 
-                txtFname.Text = currentCustomer.Name;
-                txtPhoneNumber.Text = currentCustomer.PhoneNumber;
-                txtUsername.Text = "Replace";
-                txtStreet.Text = currentCustomer.Address;
-                txtCity.Text = currentCustomer.City;
-                txtState.Text = currentCustomer.State;
-                txtZip.Text = currentCustomer.Zip.ToString();
-                txtHeader.Text = "Welcome, " + currentCustomer.Name + ".";
+                    txtFname.Text = currentCustomer.Name;
+                    txtPhoneNumber.Text = currentCustomer.PhoneNumber;
+                    txtStreet.Text = currentCustomer.Address;
+                    txtCity.Text = currentCustomer.City;
+                    txtState.Text = currentCustomer.State;
+                    txtZip.Text = currentCustomer.Zip.ToString();
+                    txtHeader.Text = "Welcome, " + currentCustomer.Name + ".";
 
-                Session["Customer"] = currentCustomer;
+                    Session["Customer"] = currentCustomer;
+                }
+                else
+
+                {
+                    //Invalid Session
+                    
+                    Response.Redirect("login.aspx");
+
+                }
+
+
             }
         }
 

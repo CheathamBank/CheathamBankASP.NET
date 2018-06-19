@@ -108,6 +108,9 @@
     <Content Include="transactions.aspx">
       <BrowseToURL>~/transactions.aspx</BrowseToURL>
     </Content>
+    <Content Include="login.aspx">
+      <BrowseToURL>~/login.aspx</BrowseToURL>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -151,6 +154,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Objects\Customer.cs" />
+    <Compile Include="Objects\Deposit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
@@ -160,12 +164,20 @@
       <DependentUpon>index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Tools\CheathamCustomerDB.cs" />
+    <Compile Include="Tools\LoginDB.cs" />
     <Compile Include="transactions.aspx.cs">
       <DependentUpon>transactions.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="transactions.aspx.designer.cs">
       <DependentUpon>transactions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

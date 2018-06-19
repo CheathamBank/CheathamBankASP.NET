@@ -60,13 +60,6 @@
                 </div>
                 <table class="auto-style9">
                     <tr>
-                        <td class="auto-style3">Username</td>
-                        <td class="auto-style4">
-                            <asp:TextBox ID="txtUsername" runat="server" CssClass="disabled" ReadOnly="True"></asp:TextBox>
-                        </td>
-                        <td class="auto-style8"></td>
-                    </tr>
-                    <tr>
                         <td class="auto-style1">First Name</td>
                         <td class="auto-style2">
                             <asp:TextBox ID="txtFname" runat="server" ReadOnly="True"></asp:TextBox>

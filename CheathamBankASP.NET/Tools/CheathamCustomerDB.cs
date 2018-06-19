@@ -17,7 +17,7 @@ namespace CheathamBankASP.NET.Tools
             return connection;
         }
 
-        public static Objects.Customer GetCustomer(string primaryKey)
+        public static Objects.Customer GetCustomer(int primaryKey)
         {
             SqlConnection c = GetConnection();
 
@@ -105,6 +105,138 @@ namespace CheathamBankASP.NET.Tools
             {
                 c.Close();
             }
+        }
+
+        public static bool AddDeposit(Objects.Deposit newDeposit)
+        {
+            SqlConnection c = GetConnection();
+
+            string insertStatement = "INSERT INTO [Transaction] " +
+                "(TransactionNumber, CustAccountNumber, TransactionType, " +
+                "Date, TransactionAmount) " +
+                "VALUES (@TransactionNumber, @CustAccountNumber, @TransactionType, @Date, @TransactionAmount)";
+
+
+            SqlCommand insertCommand = new SqlCommand(insertStatement, c);
+
+            insertCommand.Parameters.AddWithValue("@TransactionNumber", newDeposit.TransNumber);
+            insertCommand.Parameters.AddWithValue("@CustAccountNumber", newDeposit.CustAccountNumber);
+            insertCommand.Parameters.AddWithValue("@TransactionType", newDeposit.TransType);
+            insertCommand.Parameters.AddWithValue("@Date", newDeposit.Date);
+            insertCommand.Parameters.AddWithValue("@TransactionAmount", newDeposit.Amount);
+
+            try
+            {
+                c.Open();
+
+                int count = insertCommand.ExecuteNonQuery();
+                
+                if(count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                c.Close();
+            }
+        }
+
+        public static DataTable GetTransactions(string monthID, int custID)
+        {
+
+            SqlConnection c = GetConnection();
+
+            string selectStatement = "SELECT * " +
+                "FROM [Transaction] " +
+                "WHERE [Date] >= @upperBoundDate AND [Date] < @lowerBoundDate AND CustAccountNumber = @custID";
+
+            SqlCommand selectCommand = new SqlCommand(selectStatement, c);
+            DateTime date = new DateTime();
+                date = System.DateTime.Today;
+            
+            int lowerBoundMonth = Convert.ToInt32(monthID);
+            lowerBoundMonth++;
+
+
+            string upperBoundDate = monthID.ToString() + "/" + "01" + "/" + date.Year.ToString();
+            string lowerBoundDate = lowerBoundMonth.ToString() + "/" + "01" + "/" + date.Year.ToString();
+
+            selectCommand.Parameters.AddWithValue("@upperBoundDate", upperBoundDate);
+            selectCommand.Parameters.AddWithValue("@lowerBoundDate", lowerBoundDate);
+            selectCommand.Parameters.AddWithValue("@custID", custID);
+
+            try
+            {
+                c.Open();
+
+                SqlDataReader reader = selectCommand.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    return dt;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                c.Close();
+            }
+
+
+        }
+
+        public static string GetMonthID(string month)
+        {
+            SqlConnection c = GetConnection();
+
+            string selectStatement = "SELECT MonthID " +
+                "FROM Months " +
+                "WHERE MonthName = @month";
+
+            SqlCommand selectCommand = new SqlCommand(selectStatement, c);
+
+            selectCommand.Parameters.AddWithValue("@month", month);
+
+            try
+            {
+                c.Open();
+
+                SqlDataReader reader = selectCommand.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    string monthID = reader["MonthID"].ToString();
+                    return monthID;
+                }
+                return null;
+            }
+            catch(SqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                c.Close();
+            }
+
         }
     }
 }
